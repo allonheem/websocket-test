@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebSocket Test Page</title>
+</head>
+<body>
+  <h1>WebSocket Test</h1>
+  <div id="messages"></div>
+  <script>
+    const ws = new WebSocket('ws://localhost:3000?appId=app123');
+
+    ws.onopen = function() {
+      console.log('WebSocket connection established');
+    };
+
+    ws.onmessage = function(event) {
+      const messages = document.getElementById('messages');
+      messages.innerHTML += `<p>${event.data}</p>`;
+    };
+
+    ws.onerror = function(error) {
+      console.error('WebSocket error:', error);
+    };
+  </script>
+</body>
+</html>
