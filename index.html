@@ -3,39 +3,38 @@
 <head>
   <title>WebSocket Test</title>
   <script>
-    let socket; // WebSocket variable
-
-    // Function to connect to the WebSocket
     function connectWebSocket() {
-      socket = new WebSocket('ws://localhost:3000?appId=app123');
+      const socket = new WebSocket('ws://localhost:3000?appId=app123');
 
-      socket.onopen = () => logMessage('WebSocket connection established.');
-      socket.onmessage = event => displayMessage(event.data);
-      socket.onerror = error => logMessage('WebSocket error: ' + error);
-      socket.onclose = () => logMessage('WebSocket connection closed.');
+      socket.onopen = function() {
+        updateStatus('WebSocket connection established.');
+      };
+
+      socket.onmessage = function(event) {
+        updateStatus('Message received: ' + event.data);
+      };
+
+      socket.onerror = function(error) {
+        updateStatus('WebSocket error: ' + error);
+      };
+
+      socket.onclose = function() {
+        updateStatus('WebSocket connection closed.');
+      };
     }
 
-    // Display message in the message window and log
-    function displayMessage(message) {
-      logMessage('Message received: ' + message);
-      document.getElementById('messageWindow').innerHTML += '<p>' + message + '</p>';
-    }
-
-    // Log messages in console and on the webpage
-    function logMessage(message) {
-      console.log(message);
-      document.getElementById('logWindow').innerHTML += '<p>' + message + '</p>';
+    function updateStatus(message) {
+      console.log(message); // Log to console
+      document.getElementById('statusWindow').innerText = message; // Display on webpage
     }
 
     window.onload = connectWebSocket;
   </script>
 </head>
 <body>
-  <div id="messageWindow" style="height: 200px; overflow-y: auto; border: 1px solid #ccc;">
-    <!-- Messages will be displayed here -->
-  </div>
-  <div id="logWindow" style="height: 200px; overflow-y: auto; border: 1px solid #ccc; margin-top: 20px;">
-    <!-- Logs will be displayed here -->
+  <!-- HTML element for displaying status and messages -->
+  <div id="statusWindow" style="height: 200px; overflow-y: auto; border: 1px solid #ccc;">
+    <!-- Status and messages will be displayed here -->
   </div>
 </body>
 </html>
