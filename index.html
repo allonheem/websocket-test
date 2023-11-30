@@ -3,65 +3,37 @@
 <head>
   <title>WebSocket Test</title>
   <script>
+    let socket; // WebSocket variable
+
     // Function to connect to the WebSocket
     function connectWebSocket() {
-      // Creating a new WebSocket instance
-      const socket = new WebSocket('ws://localhost:3000?appId=app123');
+      socket = new WebSocket('ws://localhost:3000?appId=app123');
 
-      // Event listener for when the connection is opened
-      socket.onopen = function(event) {
-        logMessage('WebSocket connection established.');
-      };
-
-      // Event listener for receiving messages from the server
-      socket.onmessage = function(event) {
-        logMessage('Message received: ' + event.data); // Log received message
-        displayMessage(event.data); // Display the received message
-      };
-
-      // Event listener for any errors
-      socket.onerror = function(error) {
-        logMessage('WebSocket error: ' + error);
-      };
-
-      // Event listener for when the connection is closed
-      socket.onclose = function(event) {
-        logMessage('WebSocket connection closed.');
-      };
+      socket.onopen = () => logMessage('WebSocket connection established.');
+      socket.onmessage = event => displayMessage(event.data);
+      socket.onerror = error => logMessage('WebSocket error: ' + error);
+      socket.onclose = () => logMessage('WebSocket connection closed.');
     }
 
-    // Function to display messages in a message window
+    // Display message in the message window and log
     function displayMessage(message) {
-      const messageWindow = document.getElementById('messageWindow');
-      if (messageWindow) {
-        messageWindow.innerHTML += '<p>' + message + '</p>'; // Append the new message
-      } else {
-        logMessage('Message window element not found.');
-      }
+      logMessage('Message received: ' + message);
+      document.getElementById('messageWindow').innerHTML += '<p>' + message + '</p>';
     }
 
-    // Function to log messages both in console and on the webpage
+    // Log messages in console and on the webpage
     function logMessage(message) {
-      console.log(message); // Log to console
-
-      // Display on webpage
-      const logWindow = document.getElementById('logWindow');
-      if (logWindow) {
-        logWindow.innerHTML += '<p>' + message + '</p>'; // Append the new log
-      }
+      console.log(message);
+      document.getElementById('logWindow').innerHTML += '<p>' + message + '</p>';
     }
 
-    // Initialize the WebSocket connection when the window loads
     window.onload = connectWebSocket;
   </script>
 </head>
 <body>
-  <!-- HTML element for displaying messages -->
   <div id="messageWindow" style="height: 200px; overflow-y: auto; border: 1px solid #ccc;">
     <!-- Messages will be displayed here -->
   </div>
-
-  <!-- HTML element for displaying logs -->
   <div id="logWindow" style="height: 200px; overflow-y: auto; border: 1px solid #ccc; margin-top: 20px;">
     <!-- Logs will be displayed here -->
   </div>
